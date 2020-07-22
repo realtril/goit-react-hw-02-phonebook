@@ -10,13 +10,12 @@ class GuestList extends Component {
       { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
     ],
     filter: "",
-    name: "",
-    number: "",
   };
 
-  onDeleteGuest = (index) => {
-    const { contacts } = this.state;
-    contacts.splice(index, 1);
+  onDeleteGuest = (event) => {
+    const id = event.target.id;
+    const { contacts: contactList } = this.state;
+    const contacts = contactList.filter((contact) => contact.id !== id);
     this.setState({ contacts });
   };
 
@@ -56,28 +55,6 @@ class GuestList extends Component {
         />
         <br />
         <div className="Guest">
-          {/* <table>
-            <tbody>
-              {this.state.contacts.length >= 1 ? (
-                <tr>
-                  <th>Name</th>
-                  <th>Number</th>
-                </tr>
-              ) : (
-                <tr></tr>
-              )}
-              {this.state.contacts.map((user) => {
-                return (
-                  <Guest
-                    user={user}
-                    key={uuidv4()}
-                    onAddPerson={this.onAddPerson}
-                    onDeleteGuest={this.onDeleteGuest}
-                  />
-                );
-              })}
-            </tbody>
-          </table> */}
           <h2>Find contact by name</h2>
           <input
             type="text"
@@ -86,12 +63,13 @@ class GuestList extends Component {
           />
           <table className="foundContacts">
             <tbody>
-              {filteredContacts.map((user) => {
+              {filteredContacts.map((user, index) => {
                 return (
                   <Guest
                     user={user}
                     key={uuidv4()}
                     onDeleteGuest={this.onDeleteGuest}
+                    index={index}
                   />
                 );
               })}
@@ -110,10 +88,9 @@ const Guest = (props) => {
       <td>{props.user.number}</td>
       <td>
         <button
+          id={props.user.id}
           className="delete"
-          onClick={() => {
-            props.onDeleteGuest(props.index);
-          }}
+          onClick={props.onDeleteGuest}
         >
           delete
         </button>

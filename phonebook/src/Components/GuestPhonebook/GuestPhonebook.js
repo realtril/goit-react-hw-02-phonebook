@@ -5,7 +5,6 @@ class GuestPhoneBook extends Component {
   render() {
     return (
       <div className="GuestPhoneBook">
-        <br></br>
         <GuestList />
       </div>
     );

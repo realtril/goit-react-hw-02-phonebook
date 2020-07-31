@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import AlertMessage from "../Notifications/AlertMessage";
 
 class GuestList extends Component {
   state = {
@@ -47,34 +49,39 @@ class GuestList extends Component {
     });
 
     return (
-      <div className="GuestList">
+      <div className="phoneBookList">
         <AddGuest
           onAddPerson={this.onAddPerson}
           isNameExist={this.isNameExist}
           state={this.state}
         />
-        <br />
         <div className="Guest">
-          <h2>Find contact by name</h2>
           <input
             type="text"
             value={this.state.filter}
             onChange={this.onchange}
+            className="filter"
+            placeholder="Find contact by name"
           />
-          <table className="foundContacts">
-            <tbody>
-              {filteredContacts.map((user, index) => {
-                return (
+          <TransitionGroup className="Guests">
+            {filteredContacts.map((user, index) => {
+              return (
+                <CSSTransition
+                  key={uuidv4()}
+                  timeout={250}
+                  classNames="Guests-item-fade"
+                  unmountOnExit
+                >
                   <Guest
                     user={user}
                     key={uuidv4()}
                     onDeleteGuest={this.onDeleteGuest}
                     index={index}
                   />
-                );
-              })}
-            </tbody>
-          </table>
+                </CSSTransition>
+              );
+            })}
+          </TransitionGroup>
         </div>
       </div>
     );
@@ -83,26 +90,34 @@ class GuestList extends Component {
 
 const Guest = (props) => {
   return (
-    <tr>
-      <td>{props.user.name}</td>
-      <td>{props.user.number}</td>
-      <td>
-        <button
-          id={props.user.id}
-          className="delete"
-          onClick={props.onDeleteGuest}
-        >
-          delete
-        </button>
-      </td>
-    </tr>
+    <div className="contact">
+      <h2 className="contactName">{props.user.name}</h2>
+      <p>{props.user.number}</p>
+      <button
+        id={props.user.id}
+        className="delete"
+        onClick={props.onDeleteGuest}
+      >
+        Delete
+      </button>
+    </div>
   );
 };
+
+// Guest.propTypes = {
+//   contact: PropTypes.shape({
+//     name: PropTypes.string,
+//     id: PropTypes.string,
+//     namber: PropTypes.string,
+//   }).isRequired,
+//   deleteContact: PropTypes.func.isRequired,
+// };
 
 class AddGuest extends Component {
   state = {
     name: "",
     number: "",
+    alertOn: false,
   };
 
   inputHandler = ({ target }) => {
@@ -117,35 +132,68 @@ class AddGuest extends Component {
       this.props.onAddPerson(this.state);
       this.setState({ name: "", number: "" });
     } else {
-      alert(`${this.state.name} already exists`);
+      this.setState({ alertOn: true });
+      // alert(`${this.state.name} already exists`);
     }
+  };
+
+  clearAlert = () => {
+    this.setState({ alertOn: false });
   };
 
   render() {
     return (
-      <div>
-        Name :&nbsp;
-        <input
-          type="text"
-          name="name"
-          value={this.state.name}
-          onChange={this.inputHandler}
-        />
-        <br />
-        <br />
-        Number :&nbsp;
-        <input
-          type="text"
-          name="number"
-          value={this.state.number}
-          onChange={this.inputHandler}
-        />
-        <br />
-        <br />
-        <button className="addGuest" onClick={this.postNum}>
-          Add Guest
-        </button>
-      </div>
+      <>
+        <div className="phoneBookApp">
+          <CSSTransition
+            in={true}
+            appear={true}
+            timeout={500}
+            classNames="logo-slideIn"
+            unmountOnExit
+          >
+            <h1 className="logo">
+              <span role="img" aria-label="cool">
+                😎
+              </span>
+              Phonebook
+              <span role="img" aria-label="cool">
+                😎
+              </span>
+            </h1>
+          </CSSTransition>
+          <div className="addContactForm">
+            <input
+              type="text"
+              name="name"
+              value={this.state.name}
+              onChange={this.inputHandler}
+              placeholder="Name"
+            />
+            <input
+              type="text"
+              name="number"
+              value={this.state.number}
+              onChange={this.inputHandler}
+              placeholder="Number"
+            />
+            <button className="addGuest" onClick={this.postNum}>
+              Add Guest
+            </button>
+            <CSSTransition
+              in={this.state.alertOn}
+              timeout={300}
+              classNames="wrapper"
+              unmountOnExit
+            >
+              <AlertMessage
+                name={this.state.name}
+                clearAlert={this.clearAlert}
+              />
+            </CSSTransition>
+          </div>
+        </div>
+      </>
     );
   }
 }

@@ -1,0 +1,22 @@
+.wrapper {
+  background-color: #ff6347;
+  padding: 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(3px);
+  width: 360px;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+p {
+  font-size: 13px;
+  line-height: 16px;
+  margin: 0;
+}

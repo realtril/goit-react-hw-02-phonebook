@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import AlertMessage from "../Notifications/AlertMessage";
+import "../Notifications/AlertAnimation.css";
 
 class GuestList extends Component {
   state = {

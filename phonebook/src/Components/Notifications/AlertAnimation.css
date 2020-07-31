@@ -1,7 +1,7 @@
 .wrapper-enter {
   transform: translateX(100%);
 }
-.wrappr-enter-active {
+.wrapper-enter-active {
   transform: translateX(0%);
   transition: transform 1000ms ease-in-out;
 }

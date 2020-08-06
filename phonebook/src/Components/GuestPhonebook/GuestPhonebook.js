@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import GuestList from "../GuestList/GuestList";
+import GuestListDataContainer from "../GuestListDataContainer/GuestListDataContainer";
 
 class GuestPhoneBook extends Component {
   render() {
     return (
       <div className="GuestPhoneBook">
-        <GuestList />
+        <GuestListDataContainer />
       </div>
     );
   }
